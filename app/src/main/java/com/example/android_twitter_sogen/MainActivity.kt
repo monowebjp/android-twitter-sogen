@@ -6,7 +6,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import kotlinx.coroutines.*
-import twitter4j.TwitterFactory
+import twitter4j.*
 import kotlin.coroutines.CoroutineContext
 
 //プロパティファイルを使う場合
@@ -35,8 +35,14 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
             textview.text = "Now Sending"            //ここはメインスレッドで動作するのでViewの変更ができる
 
             async(context = Dispatchers.IO) {
-                val twitter = TwitterFactory().getInstance()
+                val twitter = TwitterFactory.getSingleton()
+                val statuses = twitter.getHomeTimeline()
+
+                for (status in statuses) {
+                    System.out.println(status.getUser().getName())
+                }
 //                twitter.updateStatus(editTweet.text.toString())      //ツイートの投稿
+                System.out.println(editTweet.text.toString())
             }.await()                                //.await()で通信処理が終わるまで待機
 
             editTweet.text = null
