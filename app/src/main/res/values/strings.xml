@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">android-twitter-sogen</string>
+    <string name="textview">TextView</string>
+    <string name="button">Button</string>
 </resources>
