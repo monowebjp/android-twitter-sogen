@@ -2,15 +2,15 @@ package com.example.android_twitter_sogen
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.Button
-import android.widget.EditText
-import android.widget.TextView
+import com.example.android_twitter_sogen.databinding.ActivityMainBinding
 import kotlinx.coroutines.*
 import twitter4j.*
 import kotlin.coroutines.CoroutineContext
 
 //プロパティファイルを使う場合
 class MainActivity : AppCompatActivity(), CoroutineScope {
+
+    private lateinit var binding :ActivityMainBinding
 
     //Coroutinesを扱うための設定（詳細は後述）
     private val job = Job()
@@ -19,21 +19,16 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        val button = findViewById<Button>(R.id.button)
-        button.setOnClickListener {                  //ID:buttonのボタンをクリックした際の処理
-            onClick()
+        binding.showTimelineButton.setOnClickListener {
+            onClickShowTimeline()
         }
     }
 
-    private fun onClick() {
+    private fun onClickShowTimeline() {
         launch {
-//            ツイートを入力する
-            val editTweet = findViewById<EditText>(R.id.editTweet)
-            val textview = findViewById<TextView>(R.id.textView)
-            textview.text = "Now Sending"            //ここはメインスレッドで動作するのでViewの変更ができる
-
             async(context = Dispatchers.IO) {
                 val twitter = TwitterFactory.getSingleton()
                 val statuses = twitter.getHomeTimeline()
@@ -41,17 +36,12 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
                 for (status in statuses) {
                     System.out.println(status.getUser().getName())
                 }
-//                twitter.updateStatus(editTweet.text.toString())      //ツイートの投稿
-                System.out.println(editTweet.text.toString())
-            }.await()                                //.await()で通信処理が終わるまで待機
-
-            editTweet.text = null
-            textview.text = "finish"
+            }.await()
         }
     }
 
     override fun onDestroy() {
-        job.cancel()                                 //すべてのコルーチンキャンセル用
+        job.cancel()
         super.onDestroy()
     }
 }
