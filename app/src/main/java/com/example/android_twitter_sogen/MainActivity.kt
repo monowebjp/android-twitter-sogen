@@ -3,9 +3,10 @@ package com.example.android_twitter_sogen
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
-import android.os.Looper
+import android.widget.ImageView
 import android.widget.TextView
 import com.example.android_twitter_sogen.databinding.ActivityMainBinding
+import com.squareup.picasso.Picasso
 import kotlinx.coroutines.*
 import twitter4j.*
 import kotlin.coroutines.CoroutineContext
@@ -41,14 +42,18 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
 
                     handler.post(Runnable {
                         for (status in statuses) {
+                            val icon = ImageView(this@MainActivity)
+                            Picasso.get()
+                                .load(status.user.profileImageURL.replace("http", "https"))
+                                .resize(100, 100)
+                                .into(icon)
                             val accountName = TextView(this@MainActivity)
                             accountName.text = status.user.name
                             val tweet = TextView(this@MainActivity)
                             tweet.text = status.text
+                            binding.timelineLinearLayout.addView(icon)
                             binding.timelineLinearLayout.addView(accountName)
                             binding.timelineLinearLayout.addView(tweet)
-                            println(status.user.name)
-                            println(status.user)
                         }
                     })
                 } catch (e: TwitterException) {
