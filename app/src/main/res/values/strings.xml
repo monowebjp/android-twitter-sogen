@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">android-twitter-sogen</string>
     <string name="showTimelineButton">更新</string>
+    <string name="newTweetButton">新規ツイート</string>
 </resources>

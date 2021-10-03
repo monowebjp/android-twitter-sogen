@@ -2,6 +2,9 @@ package com.example.android_twitter_sogen
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
+import android.widget.TextView
 import com.example.android_twitter_sogen.databinding.ActivityMainBinding
 import kotlinx.coroutines.*
 import twitter4j.*
@@ -28,13 +31,28 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
     }
 
     private fun onClickShowTimeline() {
+        val handler = Handler()
         launch {
             async(context = Dispatchers.IO) {
                 val twitter = TwitterFactory.getSingleton()
-                val statuses = twitter.getHomeTimeline()
 
-                for (status in statuses) {
-                    System.out.println(status.getUser().getName())
+                try {
+                    val statuses = twitter.getHomeTimeline()
+
+                    handler.post(Runnable {
+                        for (status in statuses) {
+                            val accountName = TextView(this@MainActivity)
+                            accountName.text = status.user.name
+                            val tweet = TextView(this@MainActivity)
+                            tweet.text = status.text
+                            binding.timelineLinearLayout.addView(accountName)
+                            binding.timelineLinearLayout.addView(tweet)
+                            println(status.user.name)
+                            println(status.user)
+                        }
+                    })
+                } catch (e: TwitterException) {
+                    e.printStackTrace()
                 }
             }.await()
         }

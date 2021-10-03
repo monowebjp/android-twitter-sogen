@@ -35,10 +35,19 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <Button
+            android:id="@+id/newTweetButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/newTweetButton"
+            style="?android:attr/buttonBarButtonStyle" />
+
+        <Button
             android:id="@+id/showTimelineButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/showTimelineButton" />
+            android:text="@string/showTimelineButton"
+            style="?android:attr/buttonBarButtonStyle" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
