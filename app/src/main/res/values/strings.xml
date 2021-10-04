@@ -2,4 +2,8 @@
     <string name="app_name">android-twitter-sogen</string>
     <string name="showTimelineButton">更新</string>
     <string name="newTweetButton">新規ツイート</string>
+    <string name="displayName">カピバラのビット</string>
+    <string name="screenName">bithitkit</string>
+    <string name="timelineTweet">140字までツイートできます140字までツイートできます140字までツイートできます140字までツイートできます140字までツイートできます140字までツイートできます140字までツイートできます</string>
+    <string name="icon">icon</string>
 </resources>

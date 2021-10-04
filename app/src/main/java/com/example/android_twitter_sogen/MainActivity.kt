@@ -3,6 +3,7 @@ package com.example.android_twitter_sogen
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
 import android.widget.ImageView
 import android.widget.TextView
 import com.example.android_twitter_sogen.databinding.ActivityMainBinding
@@ -36,7 +37,6 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
     }
 
     private fun onClickShowTimeline() {
-        val handler = Handler()
         launch {
             async(context = Dispatchers.IO) {
                 val twitter = TwitterFactory.getSingleton()
@@ -44,20 +44,21 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
                 try {
                     val statuses = twitter.getHomeTimeline()
 
-                    handler.post(Runnable {
-                        for (status in statuses) {
-                            val icon = ImageView(this@MainActivity)
+                    Handler(Looper.getMainLooper()).post(Runnable {
+                        for (i in statuses.indices) {
+                            val timelineItem = layoutInflater.inflate(R.layout.timeline, null)
+                            val timelineIcon = timelineItem.findViewById<ImageView>(R.id.timelineIcon)
+                            val timelineDisplayName = timelineItem.findViewById<TextView>(R.id.displayName)
+                            val timelineScreenName = timelineItem.findViewById<TextView>(R.id.screenName)
+                            val timelineTweet = timelineItem.findViewById<TextView>(R.id.timelineTweet)
                             Picasso.get()
-                                .load(status.user.profileImageURL.replace("http", "https"))
-                                .resize(100, 100)
-                                .into(icon)
-                            val accountName = TextView(this@MainActivity)
-                            accountName.text = status.user.name
-                            val tweet = TextView(this@MainActivity)
-                            tweet.text = status.text
-                            binding.timelineLinearLayout.addView(icon)
-                            binding.timelineLinearLayout.addView(accountName)
-                            binding.timelineLinearLayout.addView(tweet)
+                                .load(statuses[i].user.profileImageURL.replace("http", "https"))
+                                .resize(150, 150)
+                                .into(timelineIcon)
+                            timelineDisplayName.text = statuses[i].user.name
+                            timelineScreenName.text = "@${statuses[i].user.screenName}"
+                            timelineTweet.text = statuses[i].text
+                            binding.timelineLinearLayout.addView(timelineItem, 0)
                         }
                     })
                 } catch (e: TwitterException) {
