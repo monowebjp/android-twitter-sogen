@@ -26,6 +26,10 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        binding.timelineSwipeRefreshLayout.setOnRefreshListener {
+            onClickShowTimeline()
+        }
+
         binding.showTimelineButton.setOnClickListener {
             onClickShowTimeline()
         }
@@ -60,6 +64,7 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
                     e.printStackTrace()
                 }
             }.await()
+            binding.timelineSwipeRefreshLayout.isRefreshing = false
         }
     }
 
