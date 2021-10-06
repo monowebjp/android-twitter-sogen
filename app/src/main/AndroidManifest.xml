@@ -12,14 +12,20 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Androidtwittersogen">
         <activity
-            android:name=".CallBackActivity" android:label="@string/app_name"
-            android:launchMode="singleInstance"
-            android:exported="true">
+            android:name=".NewTweetActivity"
+            android:exported="true" />
+        <activity
+            android:name=".CallBackActivity"
+            android:exported="true"
+            android:label="@string/app_name"
+            android:launchMode="singleInstance">
             <intent-filter>
-                <action android:name="android.intent.action.VIEW"/>
-                <category android:name="android.intent.category.DEFAULT"/>
-                <category android:name="android.intent.category.BROWSABLE"/>
-                <data android:scheme="callback"/>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="callback" />
             </intent-filter>
         </activity>
         <activity

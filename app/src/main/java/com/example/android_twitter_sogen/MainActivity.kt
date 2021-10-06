@@ -6,10 +6,12 @@ import android.os.Handler
 import android.os.Looper
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import com.example.android_twitter_sogen.databinding.ActivityMainBinding
 import com.fasterxml.jackson.databind.JsonNode
 import com.squareup.picasso.Picasso
 import kotlinx.coroutines.*
+import java.net.URLEncoder
 import kotlin.coroutines.CoroutineContext
 
 //プロパティファイルを使う場合
@@ -31,8 +33,33 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
             onClickShowTimeline()
         }
 
+        binding.newTweetButton.setOnClickListener {
+            onClickTweet()
+        }
+
         binding.showTimelineButton.setOnClickListener {
             onClickShowTimeline()
+        }
+    }
+
+    private fun onClickTweet () {
+        launch {
+            var toastMessage = ""
+            var code = 0
+            async(context = Dispatchers.IO) {
+                // API呼び出し準備
+                val status = URLEncoder.encode("私の足元には半分だけの炭酸水が2つあります、なぜだ", "utf-8")
+                val params = "?status=$status"
+                code = CallTwitterAPI().tweetStatus(params)
+            }.await()
+
+            if (code == 200) {
+                toastMessage = "成功"
+            } else {
+                toastMessage = "失敗"
+            }
+
+            Toast.makeText(applicationContext, toastMessage, Toast.LENGTH_LONG).show()
         }
     }
 
@@ -61,7 +88,7 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
             async(context = Dispatchers.IO) {
                 // API呼び出し準備
                 var params: String = ""
-                if (sinceId != 0) { params = "?since_id=$sinceId" }
+                if (sinceId != 0) { params = "since_id=$sinceId" }
                 createTimeline(CallTwitterAPI().getHomeTimeline(params))
             }.await()
             binding.timelineSwipeRefreshLayout.isRefreshing = false
