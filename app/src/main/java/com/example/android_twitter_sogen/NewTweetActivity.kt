@@ -2,6 +2,8 @@ package com.example.android_twitter_sogen
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.widget.Toast
 import com.example.android_twitter_sogen.databinding.ActivityNewTweetBinding
 import kotlinx.coroutines.*
@@ -24,6 +26,16 @@ class NewTweetActivity : AppCompatActivity(), CoroutineScope {
         binding.submitTweetButton.setOnClickListener {
             onSubmitTweet()
         }
+
+        binding.newTweetArea.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(p0: Editable?) {}
+
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                binding.countNewTweet.text = p3.toString()
+            }
+        })
     }
 
     private fun onSubmitTweet () {

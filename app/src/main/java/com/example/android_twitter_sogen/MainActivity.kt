@@ -7,12 +7,10 @@ import android.os.Handler
 import android.os.Looper
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import com.example.android_twitter_sogen.databinding.ActivityMainBinding
 import com.fasterxml.jackson.databind.JsonNode
 import com.squareup.picasso.Picasso
 import kotlinx.coroutines.*
-import java.net.URLEncoder
 import kotlin.coroutines.CoroutineContext
 
 //プロパティファイルを使う場合
@@ -84,8 +82,8 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
         }
     }
 
-    override fun onDestroy() {
-        job.cancel()
-        super.onDestroy()
-    }
+//    override fun onDestroy() {
+//        job.cancel()
+//        super.onDestroy()
+//    }
 }
