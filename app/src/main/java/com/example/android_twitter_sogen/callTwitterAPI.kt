@@ -28,6 +28,8 @@ class CallTwitterAPI {
             }
         } catch (e: NullPointerException) {
             e.printStackTrace()
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
 
         return "[]"
@@ -60,6 +62,7 @@ class CallTwitterAPI {
 
         try {
             statuses = mapper.readTree(jsonStr)
+            statuses.sortedBy { it.get("id").asText().toIntOrNull() }
             return statuses
         } catch (e: JsonProcessingException) {
             e.printStackTrace()
