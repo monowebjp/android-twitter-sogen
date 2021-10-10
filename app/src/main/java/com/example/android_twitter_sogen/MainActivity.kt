@@ -1,5 +1,6 @@
 package com.example.android_twitter_sogen
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
@@ -43,24 +44,8 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
     }
 
     private fun onClickTweet () {
-        launch {
-            var toastMessage = ""
-            var code = 0
-            async(context = Dispatchers.IO) {
-                // API呼び出し準備
-                val status = URLEncoder.encode("私の足元には半分だけの炭酸水が2つあります、なぜだ", "utf-8")
-                val params = "?status=$status"
-                code = CallTwitterAPI().tweetStatus(params)
-            }.await()
-
-            if (code == 200) {
-                toastMessage = "成功"
-            } else {
-                toastMessage = "失敗"
-            }
-
-            Toast.makeText(applicationContext, toastMessage, Toast.LENGTH_LONG).show()
-        }
+        val newTweetIntent = Intent(applicationContext, NewTweetActivity::class.java)
+        startActivity(newTweetIntent)
     }
 
     private fun createTimeline(statuses: JsonNode) {
