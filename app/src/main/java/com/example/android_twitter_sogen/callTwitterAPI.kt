@@ -35,11 +35,11 @@ class CallTwitterAPI {
         return "[]"
     }
 
+    // ツイートする
     fun tweetStatus(params: String): Int {
         val url = "https://api.twitter.com/1.1/statuses/update.json$params"
         var code = 0
 
-        println(url)
         val request = OAuthRequest(Verb.POST, url)
         service.signRequest(accessToken, request)
 
@@ -54,15 +54,50 @@ class CallTwitterAPI {
         return code
     }
 
+    // いいねする
+    fun favoriteTweet (params: String): JsonNode {
+        val url = "https://api.twitter.com/1.1/favorites/create.json?$params"
+        println("------ いいね ------")
+        println(url)
+
+        val request = OAuthRequest(Verb.POST, url)
+        var jsonStr = "[]"
+        service.signRequest(accessToken, request)
+
+        try {
+            service.execute(request).use { response ->
+                println(response.body)
+                jsonStr = response.body
+            }
+        } catch (e: NullPointerException) {
+            e.printStackTrace()
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+
+        return createJson(jsonStr)
+    }
+
+    // ホームタイムライン更新
     fun getHomeTimeline(params: String): JsonNode {
         val url = "https://api.twitter.com/1.1/statuses/home_timeline.json?$params"
         val jsonStr = requestApi(url)
+
+        return createJson(jsonStr)
+    }
+
+    private fun createJson (jsonStr: String):JsonNode {
         val mapper = ObjectMapper()
         val statuses : JsonNode
 
         try {
             statuses = mapper.readTree(jsonStr)
-            statuses.sortedBy { it.get("id").asText().toIntOrNull() }
+
+            // Timelineかどうかの判定（タイムラインだったらソートする）
+            if (statuses.isArray) {
+                statuses.sortedBy { it.get("id").asText().toIntOrNull() }
+            }
+
             return statuses
         } catch (e: JsonProcessingException) {
             e.printStackTrace()

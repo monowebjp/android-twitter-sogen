@@ -18,12 +18,16 @@
             android:layout_height="48dp"
             android:orientation="horizontal">
 
-            <Button
+            <ImageButton
                 android:id="@+id/submitTweetButton"
                 android:layout_width="0dp"
-                android:layout_height="48dp"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/submitTweetButton" />
+                android:contentDescription="@string/submitTweetButton"
+                android:minHeight="48dp"
+                app:srcCompat="@drawable/ic_baseline_send_24"
+                tools:ignore="SpeakableTextPresentCheck,ImageContrastCheck" />
+
         </LinearLayout>
 
         <EditText

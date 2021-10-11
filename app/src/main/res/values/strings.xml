@@ -10,4 +10,6 @@
     <string name="countTweetCharacter">0</string>
     <string name="newTweetArea" />
     <string name="countNewTweet">0</string>
+    <string name="favoriteButton">いいね</string>
+    <string name="replyButton">返信</string>
 </resources>
