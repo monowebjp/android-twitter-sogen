@@ -54,27 +54,41 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
         }
         Handler(Looper.getMainLooper()).post(Runnable {
             for (i in statuses.size() - 1 downTo 0) {
-                println(statuses[i].get("id").asText())
+                if (statuses[i].get("text").asText().take(4) == "RT @" ) {
+                    continue
+                }
+
                 val timelineItem = layoutInflater.inflate(R.layout.timeline, null)
                 val timelineIcon = timelineItem.findViewById<ImageView>(R.id.timelineIcon)
                 val timelineDisplayName = timelineItem.findViewById<TextView>(R.id.displayName)
                 val timelineScreenName = timelineItem.findViewById<TextView>(R.id.screenName)
                 val timelineTweet = timelineItem.findViewById<TextView>(R.id.timelineTweet)
-                val timelineFavoriteButton = timelineItem.findViewById<ImageButton>(R.id.favoriteButton)
-                val timelineFavoriteStatusIcon = timelineItem.findViewById<ImageView>(R.id.favoriteStatusIcon)
+                val timelineFavoriteButton =
+                    timelineItem.findViewById<ImageButton>(R.id.favoriteButton)
+                val timelineFavoriteStatusIcon =
+                    timelineItem.findViewById<ImageView>(R.id.favoriteStatusIcon)
                 Picasso.get()
                     .load(statuses[i].get("user").get("profile_image_url_https").asText())
                     .resize(150, 150)
                     .into(timelineIcon)
                 timelineDisplayName.text = statuses[i].get("user").get("name").asText()
-                timelineScreenName.text = "@${statuses[i].get("user").get("screen_name").asText()}"
+                timelineScreenName.text =
+                    "@${statuses[i].get("user").get("screen_name").asText()}"
                 timelineTweet.text = statuses[i].get("text").asText()
 
 
-                showFavoriteIcon(timelineFavoriteButton, timelineFavoriteStatusIcon, statuses[i].get("favorited").asBoolean())
+                showFavoriteIcon(
+                    timelineFavoriteButton,
+                    timelineFavoriteStatusIcon,
+                    statuses[i].get("favorited").asBoolean()
+                )
 
                 timelineFavoriteButton.setOnClickListener {
-                    onClickFavoriteTweet(statuses[i].get("id").asText(), timelineFavoriteButton, timelineFavoriteStatusIcon)
+                    onClickFavoriteTweet(
+                        statuses[i].get("id").asText(),
+                        timelineFavoriteButton,
+                        timelineFavoriteStatusIcon
+                    )
                 }
 
                 timelineItem.findViewById<ImageButton>(R.id.replyButton).setOnClickListener {
@@ -107,7 +121,7 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
             async(context = Dispatchers.IO) {
                 // API呼び出し準備
                 var params: String = ""
-                if (sinceId != "0") { params = "since_id=$sinceId" }
+                if (sinceId != "0") { params = "&since_id=${sinceId}" }
                 createTimeline(CallTwitterAPI().getHomeTimeline(params))
             }.await()
             binding.timelineSwipeRefreshLayout.isRefreshing = false
