@@ -13,7 +13,8 @@
         android:theme="@style/Theme.Androidtwittersogen">
         <activity
             android:name=".NewTweetActivity"
-            android:exported="true" />
+            android:exported="true"
+            android:windowSoftInputMode="adjustResize"/>
         <activity
             android:name=".MainActivity"
             android:exported="true">

@@ -60,6 +60,7 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
         Handler(Looper.getMainLooper()).post(Runnable {
             for (i in statuses.size() - 1 downTo 0) {
                 if (statuses[i].get("text").asText().take(4) == "RT @"
+                    // TODO: またはツイートしている人本人に対しての自己リプライの場合は表示する
                     || (statuses[i].get("text").asText().take(1) == "@" && statuses[i].get("text").asText().take(10) != "@bithitkit")) {
                     continue
                 }

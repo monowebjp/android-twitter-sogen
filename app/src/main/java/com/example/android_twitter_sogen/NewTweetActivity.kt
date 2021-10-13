@@ -32,6 +32,7 @@ class NewTweetActivity : AppCompatActivity(), CoroutineScope {
         }
 
         binding.newTweetArea.addTextChangedListener(object : TextWatcher {
+            // TODO: 文字数カウントがおかしいので修正
             override fun afterTextChanged(p0: Editable?) {}
 
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
