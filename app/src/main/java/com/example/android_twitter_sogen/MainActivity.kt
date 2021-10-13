@@ -85,6 +85,7 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
                 timelineTweet.text = statuses[i].get("text").asText()
 
                 if (statuses[i].get("user").get("screen_name").asText() == "bithitkit" ) {
+                    // TODO: 削除ボタンの機能を追加しなきゃいけない
                     tweetDeleteButton.visibility = View.VISIBLE
                 }
 
