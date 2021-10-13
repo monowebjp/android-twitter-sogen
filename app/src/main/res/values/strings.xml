@@ -12,4 +12,5 @@
     <string name="countNewTweet">0</string>
     <string name="favoriteButton">いいね</string>
     <string name="replyButton">返信</string>
+    <string name="favoritedstatus">favoritedStatus</string>
 </resources>

@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.view.View
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
@@ -60,6 +61,7 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
                 val timelineScreenName = timelineItem.findViewById<TextView>(R.id.screenName)
                 val timelineTweet = timelineItem.findViewById<TextView>(R.id.timelineTweet)
                 val timelineFavoriteButton = timelineItem.findViewById<ImageButton>(R.id.favoriteButton)
+                val timelineFavoriteStatusIcon = timelineItem.findViewById<ImageView>(R.id.favoriteStatusIcon)
                 Picasso.get()
                     .load(statuses[i].get("user").get("profile_image_url_https").asText())
                     .resize(150, 150)
@@ -68,8 +70,11 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
                 timelineScreenName.text = "@${statuses[i].get("user").get("screen_name").asText()}"
                 timelineTweet.text = statuses[i].get("text").asText()
 
+
+                showFavoriteIcon(timelineFavoriteButton, timelineFavoriteStatusIcon, statuses[i].get("favorited").asBoolean())
+
                 timelineFavoriteButton.setOnClickListener {
-                    onClickFavoriteTweet(statuses[i].get("id").asText(), timelineFavoriteButton)
+                    onClickFavoriteTweet(statuses[i].get("id").asText(), timelineFavoriteButton, timelineFavoriteStatusIcon)
                 }
 
                 timelineItem.findViewById<ImageButton>(R.id.replyButton).setOnClickListener {
@@ -79,6 +84,22 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
                 binding.timelineLinearLayout.addView(timelineItem, 0)
             }
         })
+    }
+
+    private fun showFavoriteIcon (button: ImageButton, statusIcon: ImageView, nowStatus: Boolean) {
+        if (nowStatus) {
+            statusIcon.visibility = View.VISIBLE
+            button.setImageResource(R.drawable.ic_baseline_favorite_24)
+        } else {
+            statusIcon.visibility = View.GONE
+            button.setImageResource(R.drawable.ic_baseline_favorite_border_24)
+        }
+    }
+
+    private fun toBoolean (status: Int): Boolean {
+        // 8 = View.GONE
+        // 0 = View.VISIBLE
+        return 0 == status
     }
 
     private fun onClickShowTimeline() {
@@ -93,28 +114,23 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
         }
     }
 
-    private fun getFavoriteStatus(jsonNode: JsonNode): Boolean {
-        if (jsonNode.size() > 0) {
-            return jsonNode.get("favorited").asText() == "true"
-        }
-
-        return false
-    }
-
-    private fun onClickFavoriteTweet (id: String, timelineFavoriteButton: ImageButton) {
+    private fun onClickFavoriteTweet (
+        tweetId: String,
+        timelineFavoriteButton: ImageButton,
+        statusIcon: ImageView
+    ) {
         var favoritedStatus = false
+        val nowStatus = toBoolean(statusIcon.visibility)
         launch {
             async(context = Dispatchers.IO) {
-                favoritedStatus = getFavoriteStatus(CallTwitterAPI().favoriteTweet("id=${id}"))
+                val jsonNode = CallTwitterAPI().favoriteTweet("id=${tweetId}", nowStatus)
+
+                if (jsonNode.size() > 0) {
+                    favoritedStatus = jsonNode.get("favorited").asBoolean()
+                }
             }.await()
 
-            println(favoritedStatus)
-
-            if (favoritedStatus) {
-                timelineFavoriteButton.setImageResource(R.drawable.ic_baseline_favorite_24)
-            } else {
-                timelineFavoriteButton.setImageResource(R.drawable.ic_baseline_favorite_border_24)
-            }
+            showFavoriteIcon(timelineFavoriteButton, statusIcon, favoritedStatus)
         }
     }
 

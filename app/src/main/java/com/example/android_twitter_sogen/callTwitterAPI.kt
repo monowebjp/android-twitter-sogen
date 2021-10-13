@@ -55,9 +55,17 @@ class CallTwitterAPI {
     }
 
     // いいねする
-    fun favoriteTweet (params: String): JsonNode {
+    fun favoriteTweet (params: String, nowStatus: Boolean): JsonNode {
         // TODO: 既にいいねされているかどうかを取得して、その結果によってurlを振り分ける
-        val url = "https://api.twitter.com/1.1/favorites/create.json?$params"
+        var url = "https://api.twitter.com/1.1/favorites/"
+        println("----- nowStatus1 ------")
+        println(nowStatus)
+        if (nowStatus) {
+            url = "${url}destroy.json?${params}"
+        } else {
+            url = "${url}create.json?$params"
+        }
+
         println("------ いいね ------")
         println(url)
 
