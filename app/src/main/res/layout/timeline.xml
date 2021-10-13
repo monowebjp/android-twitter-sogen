@@ -30,6 +30,15 @@
             android:layout_weight="0.5"
             android:contentDescription="@string/replyButton"
             app:srcCompat="@drawable/ic_baseline_reply_24" />
+
+        <ImageButton
+            android:id="@+id/deleteTweetButton"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.5"
+            android:contentDescription="@string/deletetweetbutton"
+            android:visibility="gone"
+            app:srcCompat="@drawable/ic_baseline_delete_forever_24" />
     </LinearLayout>
 
     <!--  メイン  -->

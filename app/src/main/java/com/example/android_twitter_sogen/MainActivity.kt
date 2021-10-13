@@ -73,6 +73,8 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
                     timelineItem.findViewById<ImageButton>(R.id.favoriteButton)
                 val timelineFavoriteStatusIcon =
                     timelineItem.findViewById<ImageView>(R.id.favoriteStatusIcon)
+                val tweetDeleteButton = timelineItem.findViewById<ImageButton>(R.id.deleteTweetButton)
+
                 Picasso.get()
                     .load(statuses[i].get("user").get("profile_image_url_https").asText())
                     .resize(150, 150)
@@ -81,6 +83,10 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
                 timelineScreenName.text =
                     "@${statuses[i].get("user").get("screen_name").asText()}"
                 timelineTweet.text = statuses[i].get("text").asText()
+
+                if (statuses[i].get("user").get("screen_name").asText() == "bithitkit" ) {
+                    tweetDeleteButton.visibility = View.VISIBLE
+                }
 
 
                 showFavoriteIcon(

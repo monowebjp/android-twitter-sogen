@@ -13,4 +13,5 @@
     <string name="favoriteButton">いいね</string>
     <string name="replyButton">返信</string>
     <string name="favoritedstatus">favoritedStatus</string>
+    <string name="deletetweetbutton">deleteTweetButton</string>
 </resources>
