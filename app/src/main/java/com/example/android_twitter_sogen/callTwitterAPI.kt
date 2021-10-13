@@ -40,6 +40,9 @@ class CallTwitterAPI {
         val url = "https://api.twitter.com/1.1/statuses/update.json$params"
         var code = 0
 
+        println("----- tweetStatusURL -----")
+        println(url)
+
         val request = OAuthRequest(Verb.POST, url)
         service.signRequest(accessToken, request)
 
@@ -56,7 +59,6 @@ class CallTwitterAPI {
 
     // いいねする
     fun favoriteTweet (params: String, nowStatus: Boolean): JsonNode {
-        // TODO: 既にいいねされているかどうかを取得して、その結果によってurlを振り分ける
         var url = "https://api.twitter.com/1.1/favorites/"
         println("----- nowStatus1 ------")
         println(nowStatus)
@@ -89,7 +91,7 @@ class CallTwitterAPI {
 
     // ホームタイムライン更新
     fun getHomeTimeline(params: String): JsonNode {
-        val url = "https://api.twitter.com/1.1/statuses/home_timeline.json?count=200&include_entities=false&exclude_replies=true${params}"
+        val url = "https://api.twitter.com/1.1/statuses/home_timeline.json?count=200&include_entities=false${params}"
         println("----- home_timeline -----")
         println(url)
         val jsonStr = requestApi(url)

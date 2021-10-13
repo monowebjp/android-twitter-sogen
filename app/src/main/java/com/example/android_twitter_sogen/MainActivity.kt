@@ -35,7 +35,7 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
         }
 
         binding.newTweetButton.setOnClickListener {
-            onClickTweet()
+            onClickTweet("")
         }
 
         binding.showTimelineButton.setOnClickListener {
@@ -43,8 +43,13 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
         }
     }
 
-    private fun onClickTweet () {
+    private fun onClickTweet (tweetId: String) {
         val newTweetIntent = Intent(applicationContext, NewTweetActivity::class.java)
+        println("----- REPLY_ID ------")
+        println(tweetId)
+
+        newTweetIntent.putExtra("REPLY_ID", tweetId)
+
         startActivity(newTweetIntent)
     }
 
@@ -54,7 +59,8 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
         }
         Handler(Looper.getMainLooper()).post(Runnable {
             for (i in statuses.size() - 1 downTo 0) {
-                if (statuses[i].get("text").asText().take(4) == "RT @" ) {
+                if (statuses[i].get("text").asText().take(4) == "RT @"
+                    || (statuses[i].get("text").asText().take(1) == "@" && statuses[i].get("text").asText().take(10) != "@bithitkit")) {
                     continue
                 }
 
@@ -92,7 +98,7 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
                 }
 
                 timelineItem.findViewById<ImageButton>(R.id.replyButton).setOnClickListener {
-                    println("${statuses[i].get("id").asText()}返信！")
+                    onClickTweet(statuses[i].get("id").asText())
                 }
 
                 binding.timelineLinearLayout.addView(timelineItem, 0)

@@ -20,8 +20,12 @@ class NewTweetActivity : AppCompatActivity(), CoroutineScope {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         binding = ActivityNewTweetBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        println("----- intent check -----")
+        println(intent.getStringExtra("REPLY_ID"))
 
         binding.submitTweetButton.setOnClickListener {
             onSubmitTweet()
@@ -40,12 +44,19 @@ class NewTweetActivity : AppCompatActivity(), CoroutineScope {
 
     private fun onSubmitTweet () {
         launch {
+            val replyId = intent.getStringExtra("REPLY_ID")
             var toastMessage = ""
             var code = 0
+
             async(context = Dispatchers.IO) {
                 // API呼び出し準備
                 val status = URLEncoder.encode("${binding.newTweetArea.text}", "utf-8")
-                val params = "?status=$status"
+                var params = "?status=$status"
+                if (replyId != "") {
+                    params = "${params}&in_reply_to_status_id=${replyId}"
+                }
+                println("----- param check -----")
+                println(params)
                 code = CallTwitterAPI().tweetStatus(params)
             }.await()
 
