@@ -7,7 +7,8 @@
         <entry key="app/src/main/res/layout/activity_call_back.xml" value="0.1734375" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.335" />
         <entry key="app/src/main/res/layout/activity_new_tweet.xml" value="0.15833333333333333" />
-        <entry key="app/src/main/res/layout/timeline.xml" value="0.22991071428571427" />
+        <entry key="app/src/main/res/layout/activity_user_reply.xml" value="0.2" />
+        <entry key="app/src/main/res/layout/timeline.xml" value="0.24730026153359289" />
       </map>
     </option>
   </component>

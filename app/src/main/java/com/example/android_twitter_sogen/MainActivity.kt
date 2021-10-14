@@ -5,10 +5,14 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
+import android.view.GestureDetector
+import android.view.MotionEvent
 import android.view.View
-import android.widget.ImageButton
-import android.widget.ImageView
-import android.widget.TextView
+import android.widget.*
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.view.GestureDetectorCompat
+import androidx.recyclerview.widget.RecyclerView
 import com.example.android_twitter_sogen.databinding.ActivityMainBinding
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.node.ArrayNode
@@ -17,8 +21,10 @@ import com.squareup.picasso.Picasso
 import kotlinx.coroutines.*
 import kotlin.coroutines.CoroutineContext
 
+
 //プロパティファイルを使う場合
-class MainActivity : AppCompatActivity(), CoroutineScope {
+class MainActivity : AppCompatActivity(),
+    CoroutineScope {
     private lateinit var binding :ActivityMainBinding
     private var sinceId: String = "0"
 
@@ -32,6 +38,7 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+
         binding.timelineSwipeRefreshLayout.setOnRefreshListener {
             onClickShowTimeline()
         }
@@ -41,10 +48,9 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
         }
     }
 
+
     private fun onClickTweet (tweetId: String) {
         val newTweetIntent = Intent(applicationContext, NewTweetActivity::class.java)
-        println("----- REPLY_ID ------")
-        println(tweetId)
 
         newTweetIntent.putExtra("REPLY_ID", tweetId)
 
@@ -68,8 +74,6 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
                 val timelineDisplayName = timelineItem.findViewById<TextView>(R.id.displayName)
                 val timelineScreenName = timelineItem.findViewById<TextView>(R.id.screenName)
                 val timelineTweet = timelineItem.findViewById<TextView>(R.id.timelineTweet)
-                val timelineFavoriteButton =
-                    timelineItem.findViewById<ImageButton>(R.id.favoriteButton)
                 val timelineFavoriteStatusIcon =
                     timelineItem.findViewById<ImageView>(R.id.favoriteStatusIcon)
                 val tweetDeleteButton = timelineItem.findViewById<ImageButton>(R.id.deleteTweetButton)
@@ -91,29 +95,38 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
                 println(statuses[i].get("entities").findPath("media"))
                 timelineTweet.text = decodeImageUrl(tweet, statuses[i].get("entities").findPath("media"))
 
+
+                val detector = GestureDetector(
+                    applicationContext,
+                    object : GestureDetector.SimpleOnGestureListener() {
+                        override fun onDoubleTap(e: MotionEvent?): Boolean {
+                            println("ダブルタップされたよ\uD83D\uDE02")
+                            onClickFavoriteTweet(
+                                statuses[i].get("id").asText(),
+                                timelineFavoriteStatusIcon
+                            )
+                            return super.onDoubleTap(e)
+                        }
+                    })
+
                 if (statuses[i].get("user").get("screen_name").asText() == "bithitkit" ) {
                     // TODO: 削除ボタンの機能を追加しなきゃいけない
                     tweetDeleteButton.visibility = View.VISIBLE
                 }
 
+                timelineItem.setOnTouchListener { _, event ->
+                    detector.onTouchEvent(event)
+                }
+
 
                 showFavoriteIcon(
-                    timelineFavoriteButton,
                     timelineFavoriteStatusIcon,
                     statuses[i].get("favorited").asBoolean()
                 )
 
-                timelineFavoriteButton.setOnClickListener {
-                    onClickFavoriteTweet(
-                        statuses[i].get("id").asText(),
-                        timelineFavoriteButton,
-                        timelineFavoriteStatusIcon
-                    )
-                }
-
-                timelineItem.findViewById<ImageButton>(R.id.replyButton).setOnClickListener {
-                    onClickTweet(statuses[i].get("id").asText())
-                }
+//                timelineItem.findViewById<ImageButton>(R.id.replyButton).setOnClickListener {
+//                    onClickTweet(statuses[i].get("id").asText())
+//                }
 
                 // TODO: 引用RTを実装する
 
@@ -141,13 +154,11 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
         return text
     }
 
-    private fun showFavoriteIcon (button: ImageButton, statusIcon: ImageView, nowStatus: Boolean) {
+    private fun showFavoriteIcon (statusIcon: ImageView, nowStatus: Boolean) {
         if (nowStatus) {
             statusIcon.visibility = View.VISIBLE
-            button.setImageResource(R.drawable.ic_baseline_favorite_24)
         } else {
             statusIcon.visibility = View.GONE
-            button.setImageResource(R.drawable.ic_baseline_favorite_border_24)
         }
     }
 
@@ -171,7 +182,6 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
 
     private fun onClickFavoriteTweet (
         tweetId: String,
-        timelineFavoriteButton: ImageButton,
         statusIcon: ImageView
     ) {
         var favoritedStatus = false
@@ -185,7 +195,7 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
                 }
             }.await()
 
-            showFavoriteIcon(timelineFavoriteButton, statusIcon, favoritedStatus)
+            showFavoriteIcon(statusIcon, favoritedStatus)
         }
     }
 

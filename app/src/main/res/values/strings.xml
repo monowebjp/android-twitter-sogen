@@ -1,7 +1,6 @@
 <resources>
     <string name="app_name">草原の工房</string>
     <string name="showTimelineButton">更新</string>
-    <string name="newTweetButton">新規ツイート</string>
     <string name="displayName">カピバラのビット</string>
     <string name="screenName">bithitkit</string>
     <string name="timelineTweet">140字までツイートできます140字までツイートできます140字までツイートできます140字までツイートできます140字までツイートできます140字までツイートできます140字までツイートできます</string>
@@ -12,9 +11,11 @@
     <string name="countNewTweet">0</string>
     <string name="favoriteButton">いいね</string>
     <string name="replyButton">返信</string>
-    <string name="favoritedstatus">favoritedStatus</string>
-    <string name="deletetweetbutton">deleteTweetButton</string>
-    <string name="newtweetbutton">newTweetButton</string>
-    <string name="showmentionsbutton">showMentionsButton</string>
-    <string name="quotebutton">quoteButton</string>
+    <string name="favoriteStatus">favoriteStatus</string>
+    <string name="deleteTweetButton">deleteTweetButton</string>
+    <string name="newTweetButton">newTweetButton</string>
+    <string name="showMentionsButton">showMentionsButton</string>
+    <string name="quoteButton">quoteButton</string>
+    <string name="homeTab">ホーム</string>
+    <string name="mentionTab">メンション</string>
 </resources>
