@@ -32,6 +32,14 @@
             app:srcCompat="@drawable/ic_baseline_reply_24" />
 
         <ImageButton
+            android:id="@+id/quoteButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:contentDescription="@string/quotebutton"
+            app:srcCompat="@drawable/ic_baseline_format_quote_24" />
+
+        <ImageButton
             android:id="@+id/deleteTweetButton"
             android:layout_width="0dp"
             android:layout_height="match_parent"

@@ -39,10 +39,6 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
         binding.newTweetButton.setOnClickListener {
             onClickTweet("")
         }
-
-        binding.showTimelineButton.setOnClickListener {
-            onClickShowTimeline()
-        }
     }
 
     private fun onClickTweet (tweetId: String) {
@@ -118,6 +114,8 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
                 timelineItem.findViewById<ImageButton>(R.id.replyButton).setOnClickListener {
                     onClickTweet(statuses[i].get("id").asText())
                 }
+
+                // TODO: 引用RTを実装する
 
                 binding.timelineLinearLayout.addView(timelineItem, 0)
             }

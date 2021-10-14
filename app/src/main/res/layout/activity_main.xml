@@ -43,21 +43,26 @@
             android:gravity="bottom"
             android:orientation="horizontal">
 
-            <Button
+            <ImageButton
                 android:id="@+id/newTweetButton"
-                style="?android:attr/buttonBarButtonStyle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/newTweetButton" />
+                android:contentDescription="@string/newtweetbutton"
+                android:minHeight="48dp"
+                app:srcCompat="@drawable/ic_baseline_mode_24"
+                tools:ignore="ImageContrastCheck" />
 
-            <Button
-                android:id="@+id/showTimelineButton"
-                style="?android:attr/buttonBarButtonStyle"
+            <ImageButton
+                android:id="@+id/showMentionsButton"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/showTimelineButton" />
+                android:contentDescription="@string/showmentionsbutton"
+                android:minHeight="48dp"
+                app:srcCompat="@drawable/ic_baseline_alternate_email_24"
+                tools:ignore="SpeakableTextPresentCheck,ImageContrastCheck" />
+
         </LinearLayout>
 
     </LinearLayout>
