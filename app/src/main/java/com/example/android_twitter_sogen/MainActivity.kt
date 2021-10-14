@@ -11,6 +11,8 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.example.android_twitter_sogen.databinding.ActivityMainBinding
 import com.fasterxml.jackson.databind.JsonNode
+import com.fasterxml.jackson.databind.node.ArrayNode
+import com.fasterxml.jackson.databind.node.JsonNodeType
 import com.squareup.picasso.Picasso
 import kotlinx.coroutines.*
 import kotlin.coroutines.CoroutineContext
@@ -83,7 +85,15 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
                 timelineDisplayName.text = statuses[i].get("user").get("name").asText()
                 timelineScreenName.text =
                     "@${statuses[i].get("user").get("screen_name").asText()}"
-                timelineTweet.text = statuses[i].get("text").asText()
+
+                // TODO: URLの短縮を解除して、サムネイル画像等を表示する
+                var tweet = statuses[i].get("text").asText()
+                tweet = decodeTweetShortUrl(tweet, statuses[i].get("entities").findPath("urls"))
+
+                println("----- えんてぃてぃ -----")
+                println(statuses[i].get("text").asText())
+                println(statuses[i].get("entities").findPath("media"))
+                timelineTweet.text = decodeImageUrl(tweet, statuses[i].get("entities").findPath("media"))
 
                 if (statuses[i].get("user").get("screen_name").asText() == "bithitkit" ) {
                     // TODO: 削除ボタンの機能を追加しなきゃいけない
@@ -112,6 +122,25 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
                 binding.timelineLinearLayout.addView(timelineItem, 0)
             }
         })
+    }
+
+    private fun decodeTweetShortUrl (text: String, entitiesURL: JsonNode): String {
+        var tweet = text
+        for (entity in entitiesURL) {
+            tweet = tweet.replace(entity.get("url").asText(), entity.get("expanded_url").asText())
+        }
+
+        return tweet
+    }
+
+    private fun decodeImageUrl (text: String, entitiesMedia: JsonNode): String {
+        var tweet = text
+
+        for (entity in entitiesMedia) {
+            tweet = tweet.replace(entity.get("url").asText(), entity.get("media_url_https").asText())
+        }
+
+        return text
     }
 
     private fun showFavoriteIcon (button: ImageButton, statusIcon: ImageView, nowStatus: Boolean) {

@@ -40,9 +40,6 @@ class CallTwitterAPI {
         val url = "https://api.twitter.com/1.1/statuses/update.json$params"
         var code = 0
 
-        println("----- tweetStatusURL -----")
-        println(url)
-
         val request = OAuthRequest(Verb.POST, url)
         service.signRequest(accessToken, request)
 
@@ -68,9 +65,6 @@ class CallTwitterAPI {
             url = "${url}create.json?$params"
         }
 
-        println("------ いいね ------")
-        println(url)
-
         val request = OAuthRequest(Verb.POST, url)
         var jsonStr = "[]"
         service.signRequest(accessToken, request)
@@ -91,9 +85,7 @@ class CallTwitterAPI {
 
     // ホームタイムライン更新
     fun getHomeTimeline(params: String): JsonNode {
-        val url = "https://api.twitter.com/1.1/statuses/home_timeline.json?count=200&include_entities=false${params}"
-        println("----- home_timeline -----")
-        println(url)
+        val url = "https://api.twitter.com/1.1/statuses/home_timeline.json?count=200${params}"
         val jsonStr = requestApi(url)
 
         return createJson(jsonStr)
