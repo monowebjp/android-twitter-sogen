@@ -99,6 +99,11 @@ class MainActivity : AppCompatActivity(),
                 val detector = GestureDetector(
                     applicationContext,
                     object : GestureDetector.SimpleOnGestureListener() {
+                        override fun onLongPress(event: MotionEvent) {
+                            println("ロングプレスされたよ")
+                            onClickTweet(statuses[i].get("id").asText())
+                            // TODO: ここで引用か返信か選べるようにする
+                        }
                         override fun onDoubleTap(e: MotionEvent?): Boolean {
                             println("ダブルタップされたよ\uD83D\uDE02")
                             onClickFavoriteTweet(
@@ -123,10 +128,6 @@ class MainActivity : AppCompatActivity(),
                     timelineFavoriteStatusIcon,
                     statuses[i].get("favorited").asBoolean()
                 )
-
-//                timelineItem.findViewById<ImageButton>(R.id.replyButton).setOnClickListener {
-//                    onClickTweet(statuses[i].get("id").asText())
-//                }
 
                 // TODO: 引用RTを実装する
 
